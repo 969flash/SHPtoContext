@@ -93,7 +93,41 @@ def read_shapefile_from_zip(zip_path):
             prj=zipshape.open("N3A_B0010000.dbf"),
         )
 
-    return contour_shape, building_shape
+    # 도로영역 정보
+    try:
+        road_regions_shape = shapefile.Reader(
+            shp=zipshape.open("N3A_A0010000.shp"),
+            shx=zipshape.open("N3A_A0010000.shx"),
+            dbf=zipshape.open("N3A_A0010000.dbf"),
+            prj=zipshape.open("N3A_A0010000.dbf"),
+        )
+    except KeyError:
+        raise ("NO ROAD REGION")
+        # road_regions_shape = shapefile.Reader(
+        #     shp=zipshape.open(".shp"),
+        #     shx=zipshape.open(".shx"),
+        #     dbf=zipshape.open(".dbf"),
+        #     prj=zipshape.open(".dbf"),
+        # )
+
+    # 도로 중심선 정보
+    try:
+        road_centerlines_shape = shapefile.Reader(
+            shp=zipshape.open("N3L_A0020000.shp"),
+            shx=zipshape.open("N3L_A0020000.shx"),
+            dbf=zipshape.open("N3L_A0020000.dbf"),
+            prj=zipshape.open("N3L_A0020000.dbf"),
+        )
+    except KeyError:
+        raise ("NO ROAD CENTER")
+        # road_centerlines_shape = shapefile.Reader(
+        #     shp=zipshape.open(".shp"),
+        #     shx=zipshape.open(".shx"),
+        #     dbf=zipshape.open(".dbf"),
+        #     prj=zipshape.open(".dbf"),
+        # )
+
+    return contour_shape, building_shape, road_regions_shape, road_centerlines_shape
 
 
 def create_contour_curves(contour_geometry_records):
@@ -141,25 +175,32 @@ def create_building_breps(building_geometry_records, mesh_terrain):
         min_z = min(pt.Z for pt in projected_pts)
         translation_vector = geo.Vector3d(0, 0, min_z - vertices[0].Z)
         bldg_crv.Translate(translation_vector)
-        bldg_brep = geo.Extrusion.Create(
-            bldg_crv, geo.Plane.WorldXY, bldg_floor * 3.5, True
-        )
+        bldg_brep = geo.Extrusion.Create(bldg_crv, -bldg_floor * 3.5, True)
         bldg_breps.append(bldg_brep)
     return bldg_breps
 
 
 # 1. zip 파일에서 shapefile 추출
-contour_shape, building_shape = read_shapefile_from_zip(path)
+contour_shape, building_shape, road_region_shape, road_centerline_shape = (
+    read_shapefile_from_zip(path)
+)
+
 contour_data = shp_importer.extract_data_from_shapefile(contour_shape)
 building_data = shp_importer.extract_data_from_shapefile(building_shape)
+road_region_data = shp_importer.extract_data_from_shapefile(road_region_shape)
+road_centerline_data = shp_importer.extract_data_from_shapefile(road_centerline_shape)
 
 # 2. shp 파일로부터 데이터 추출
 contour_data.geometry, contour_data.records
 contour_geometry_records = list(zip(contour_data.geometry, contour_data.records))
 building_geometry_records = list(zip(building_data.geometry, building_data.records))
 
-# 3. 추출한 데이터로 등고선 및 건물 생성
+
+# 3. 추출한 데이터로 등고선, 지형, 건물, 도로, 도로 중심선 생성
 contour_crvs = create_contour_curves(contour_geometry_records)
 pts_for_mesh = create_points_for_mesh(contour_crvs, RESOLUTION)
 mesh_terrain = ghcomp.DelaunayMesh(pts_for_mesh)
 bldg_breps = create_building_breps(building_geometry_records, mesh_terrain)
+
+road_regions = [data[0] for data in road_region_data.geometry]
+road_centerlines = [data[0] for data in road_centerline_data.geometry]
