@@ -1,206 +1,277 @@
 # -*- coding:utf-8 -*-
-try:
-    from typing import List, Tuple, Dict, Any, Optional, Iterable
-except ImportError:
-    pass
-
-import shapefile
+from typing import List, Tuple, Optional
 import zipfile
-import scriptcontext as sc
-import shp_importer
+import shapefile
 import Rhino.Geometry as geo
-import rhinoscriptsyntax as rs
 import ghpythonlib.components as ghcomp  # ignore
-import importlib
 
-importlib.reload(shp_importer)
+#########################
+# bsh960flash@snu.ac.kr #
+#########################
 
-# path = > grasshopper 로부터 받아온 zip 파일 경로
 
+# Contour Divide Resolution(Higher value means more points in terrain mesh)
 RESOLUTION = 4
 
-
-def get_projected_pt_on_mesh(pt, mesh):
-    # type: (geo.Point3d, geo.Mesh) -> geo.Point3d | None
-    # Z축 방향 레이 생성
-    ray = geo.Ray3d(pt, geo.Vector3d(0, 0, -1))  # Z축 아래 방향
-    t = geo.Intersect.Intersection.MeshRay(mesh, ray)
-
-    if t >= 0:
-        # 레이의 t 값으로 교차점 계산
-        return ray.PointAt(t)
-
-    ray = geo.Ray3d(pt, geo.Vector3d(0, 0, 1))  # Z축 윗 방향
-    t = geo.Intersect.Intersection.MeshRay(mesh, ray)
-
-    if t >= 0:
-        # 레이의 t 값으로 교차점 계산
-        return ray.PointAt(t)
-
-    return None  # 교차가 없을 경우 None 반환
-
-
-def get_vertices(crv):
-    # type: (geo.Curve) -> List[geo.Point3d]
-    """crv의 꼭지점 찾기"""
-    vertices = []  # type: List[geo.Point3d]
-    # 스팬의 모든 시작점 추가
-    for i in range(crv.SpanCount):
-        span_domain = crv.SpanDomain(i)
-        span_start_pt = crv.PointAt(span_domain[0])
-        vertices.append(span_start_pt)
-
-    # 열린 커브는 끝점 추가.
-    if not crv.IsClosed:
-        vertices.append(crv.PointAtEnd)
-
-    return vertices
+# Shape type mapping
+# This dictionary categorizes shape types based on their IDs as defined in the shapefile specification.
+# The categories are 'point' and 'polyline', and the IDs represent different geometry types.
+shape_types = {
+    "point": [
+        1,  # POINT
+        8,  # MULTIPOINT
+        11,  # POINTZ
+        18,  # MULTIPOINTZ
+        21,  # POINTM
+        28,  # MULTIPOINTM
+    ],
+    "polyline": [
+        3,  # POLYLINE
+        5,  # POLYGON
+        13,  # POLYLINEZ
+        15,  # POLYGONZ
+        23,  # POLYLINEM
+        25,  # POLYGONM
+        31,  # MULTIPATCH
+    ],
+}
 
 
-def read_shapefile_from_zip(zip_path):
+class ShapefileHandler:
+    """
+    A class to manage Shapefile operations.
+    """
 
-    zipshape = zipfile.ZipFile(zip_path, "r")
+    def __init__(self, zip_path: str):
+        self.zip_path = zip_path
+        self.zip_file = zipfile.ZipFile(zip_path, "r")
 
-    # 등고선
-    try:
-        contour_shape = shapefile.Reader(
-            shp=zipshape.open("N1L_F0010000.shp"),
-            shx=zipshape.open("N1L_F0010000.shx"),
-            dbf=zipshape.open("N1L_F0010000.dbf"),
-            prj=zipshape.open("N1L_F0010000.dbf"),
+    def read_shapefile(self, file_prefixes: List[str]) -> Optional[shapefile.Reader]:
+        """
+        Attempts to read a shapefile from the zip archive using a list of prefixes.
+        """
+        for prefix in file_prefixes:
+            try:
+                return shapefile.Reader(
+                    shp=self.zip_file.open(f"{prefix}.shp"),
+                    shx=self.zip_file.open(f"{prefix}.shx"),
+                    dbf=self.zip_file.open(f"{prefix}.dbf"),
+                    prj=self.zip_file.open(f"{prefix}.prj"),
+                )
+            except KeyError:
+                continue
+        return None
+
+    def extract_data(self, shapefile: shapefile.Reader) -> "ShpData":
+        """
+        Extracts data from a shapefile.
+        """
+        result = ShapefileParser.read_shapefile(shapefile)
+        return ShpData(*result)
+
+
+class ShpData:
+    """
+    A class to store Shapefile data.
+    """
+
+    def __init__(self, shape_type, geometry, fields, field_names, records):
+        self.shape_type = shape_type
+        self.geometry = geometry
+        self.fields = fields
+        self.field_names = field_names
+        self.records = records
+
+
+class ShapefileParser:
+    """
+    A class to handle parsing operations for shapefiles.
+    """
+
+    @staticmethod
+    def find_type(shape_type):
+        for key, values in shape_types.items():
+            if shape_type in values:
+                return key
+        return None
+
+    @staticmethod
+    def read_shapefile(sf: shapefile.Reader, encoding="utf-8") -> Tuple:
+        result_geom = []
+        result_fields = []
+        result_field_names = []
+        result_records = []
+
+        shape_type = ShapefileParser.find_type(sf.shapeType)
+
+        # Extract field names
+        for field in sf.fields:
+            if field[0] != "DeletionFlag":
+                _field = field[0]
+                if isinstance(_field, bytes):
+                    _field = _field.decode(encoding, errors="replace")
+                result_field_names.append(_field)
+                result_fields.append(field)
+
+        # Extract geometry and records
+        for shape, record in zip(sf.shapes(), sf.records()):
+            geom = ShapefileParser.parse_geometry(shape, shape_type)
+            result_geom.append(geom)
+            _record = []
+            for rec in record:
+                if isinstance(rec, bytes):
+                    _record.append(rec.decode(encoding, errors="replace"))
+                else:
+                    _record.append(rec)
+            result_records.append(_record)
+
+        return (
+            shape_type,
+            result_geom,
+            result_fields,
+            result_field_names,
+            result_records,
         )
-    except KeyError:
-        contour_shape = shapefile.Reader(
-            shp=zipshape.open("N3L_F0010000.shp"),
-            shx=zipshape.open("N3L_F0010000.shx"),
-            dbf=zipshape.open("N3L_F0010000.dbf"),
-            prj=zipshape.open("N3L_F0010000.dbf"),
-        )
 
-    # 빌딩 정보
-    try:
-        building_shape = shapefile.Reader(
-            shp=zipshape.open("N1A_B0010000.shp"),
-            shx=zipshape.open("N1A_B0010000.shx"),
-            dbf=zipshape.open("N1A_B0010000.dbf"),
-            prj=zipshape.open("N1A_B0010000.dbf"),
-        )
-    except KeyError:
-        building_shape = shapefile.Reader(
-            shp=zipshape.open("N3A_B0010000.shp"),
-            shx=zipshape.open("N3A_B0010000.shx"),
-            dbf=zipshape.open("N3A_B0010000.dbf"),
-            prj=zipshape.open("N3A_B0010000.dbf"),
-        )
-
-    # 도로영역 정보
-    try:
-        road_regions_shape = shapefile.Reader(
-            shp=zipshape.open("N3A_A0010000.shp"),
-            shx=zipshape.open("N3A_A0010000.shx"),
-            dbf=zipshape.open("N3A_A0010000.dbf"),
-            prj=zipshape.open("N3A_A0010000.dbf"),
-        )
-    except KeyError:
-        raise ("NO ROAD REGION")
-        # road_regions_shape = shapefile.Reader(
-        #     shp=zipshape.open(".shp"),
-        #     shx=zipshape.open(".shx"),
-        #     dbf=zipshape.open(".dbf"),
-        #     prj=zipshape.open(".dbf"),
-        # )
-
-    # 도로 중심선 정보
-    try:
-        road_centerlines_shape = shapefile.Reader(
-            shp=zipshape.open("N3L_A0020000.shp"),
-            shx=zipshape.open("N3L_A0020000.shx"),
-            dbf=zipshape.open("N3L_A0020000.dbf"),
-            prj=zipshape.open("N3L_A0020000.dbf"),
-        )
-    except KeyError:
-        raise ("NO ROAD CENTER")
-        # road_centerlines_shape = shapefile.Reader(
-        #     shp=zipshape.open(".shp"),
-        #     shx=zipshape.open(".shx"),
-        #     dbf=zipshape.open(".dbf"),
-        #     prj=zipshape.open(".dbf"),
-        # )
-
-    return contour_shape, building_shape, road_regions_shape, road_centerlines_shape
-
-
-def create_contour_curves(contour_geometry_records):
-    contour_crvs = []
-    for contour_geom, contour_record in contour_geometry_records:
-        contour_crvs.append(
-            geo.PolylineCurve(
-                [
-                    geo.Point3d(
-                        contour_geom[0].Point(pt_count).X,
-                        contour_geom[0].Point(pt_count).Y,
-                        contour_record[1],
+    @staticmethod
+    def parse_geometry(shape, shape_type):
+        if shape_type == "point":
+            return [GeometryUtils.list2point(pt) for pt in shape.points]
+        elif shape_type == "polyline":
+            parts = [
+                shape.points[
+                    shape.parts[i] : (
+                        shape.parts[i + 1] if i + 1 < len(shape.parts) else None
                     )
-                    for pt_count in range(contour_geom[0].SpanCount)
                 ]
+                for i in range(len(shape.parts))
+            ]
+            return [
+                geo.PolylineCurve([GeometryUtils.list2point(pt) for pt in part])
+                for part in parts
+            ]
+        return []
+
+
+class GeometryUtils:
+    """
+    A utility class for geometry-related operations.
+    """
+
+    @staticmethod
+    def list2point(pts):
+        pts = list(pts)
+        if len(pts) == 2:
+            pts.append(0)
+        return geo.Point3d(*pts)
+
+    @staticmethod
+    def get_vertices(curve):
+        vertices = [
+            curve.PointAt(curve.SpanDomain(i)[0]) for i in range(curve.SpanCount)
+        ]
+        if not curve.IsClosed:
+            vertices.append(curve.PointAtEnd)
+        return vertices
+
+    @staticmethod
+    def get_projected_pt_on_mesh(pt, mesh):
+        for direction in [geo.Vector3d(0, 0, -1), geo.Vector3d(0, 0, 1)]:
+            ray = geo.Ray3d(pt, direction)
+            t = geo.Intersect.Intersection.MeshRay(mesh, ray)
+            if t >= 0:
+                return ray.PointAt(t)
+        return None
+
+
+class ContourProcessor:
+    """
+    A class to handle contour operations.
+    """
+
+    @staticmethod
+    def create_contour_curves(contour_geometry_records):
+        contour_crvs = []
+        for contour_geom, contour_record in contour_geometry_records:
+            contour_crvs.append(
+                geo.PolylineCurve(
+                    [
+                        geo.Point3d(
+                            contour_geom[0].Point(pt_count).X,
+                            contour_geom[0].Point(pt_count).Y,
+                            contour_record[1],
+                        )
+                        for pt_count in range(contour_geom[0].SpanCount)
+                    ]
+                )
             )
-        )
-    return contour_crvs
+        return contour_crvs
+
+    @staticmethod
+    def create_points_for_mesh(contour_curves, resolution):
+        points = []
+        for curve in contour_curves:
+            params = curve.DivideByLength(resolution, True)
+            if params:
+                points.extend([curve.PointAt(param) for param in params])
+        return points
 
 
-def create_points_for_mesh(contour_crvs, resolution):
-    pts_for_mesh = []
-    for crv in contour_crvs:
-        params = crv.DivideByLength(resolution, True)
-        if params:
-            pts_for_mesh.extend([crv.PointAt(param) for param in params])
-    return pts_for_mesh
+class BuildingProcessor:
+    """
+    A class to process building geometries.
+    """
+
+    @staticmethod
+    def create_building_breps(building_geometry_records, mesh_terrain):
+        breps = []
+        for geom, record in building_geometry_records:
+            base_curve = geom[0]
+            height = record[5] * 3.5
+            vertices = GeometryUtils.get_vertices(base_curve)
+
+            projected_pts = [
+                GeometryUtils.get_projected_pt_on_mesh(pt, mesh_terrain)
+                for pt in vertices
+            ]
+            projected_pts = list(filter(None, projected_pts))
+
+            if projected_pts:
+                min_z = min(pt.Z for pt in projected_pts)
+                base_curve.Translate(geo.Vector3d(0, 0, min_z - vertices[0].Z))
+                breps.append(geo.Extrusion.Create(base_curve, -height, True))
+        return breps
 
 
-def create_building_breps(building_geometry_records, mesh_terrain):
-    bldg_breps = []
-    for building_geom, building_record in building_geometry_records:
-        bldg_crv = building_geom[0]
-        bldg_floor = building_record[5]
-        vertices = get_vertices(bldg_crv)
+# path -> parameter of the component in grasshopper that is the path to the zip file
 
-        projected_pts = list(
-            filter(
-                None, [get_projected_pt_on_mesh(pt, mesh_terrain) for pt in vertices]
-            )
-        )
-        if not projected_pts:
-            continue
+# Main workflow
+handler = ShapefileHandler(path)
+contour_shape = handler.read_shapefile(["N1L_F0010000", "N3L_F0010000"])
+building_shape = handler.read_shapefile(["N1A_B0010000", "N3A_B0010000"])
+road_region_shape = handler.read_shapefile(["N3A_A0010000"])
+road_centerline_shape = handler.read_shapefile(["N3L_A0020000"])
 
-        min_z = min(pt.Z for pt in projected_pts)
-        translation_vector = geo.Vector3d(0, 0, min_z - vertices[0].Z)
-        bldg_crv.Translate(translation_vector)
-        bldg_brep = geo.Extrusion.Create(bldg_crv, -bldg_floor * 3.5, True)
-        bldg_breps.append(bldg_brep)
-    return bldg_breps
+# Extract data
+contour_data = handler.extract_data(contour_shape)
+building_data = handler.extract_data(building_shape)
+road_region_data = handler.extract_data(road_region_shape)
+road_centerline_data = handler.extract_data(road_centerline_shape)
 
+# Process contour
+contour_geometry_records = list(zip(contour_data.geometry, contour_data.records))
+contour_curves = ContourProcessor.create_contour_curves(contour_geometry_records)
 
-# 1. zip 파일에서 shapefile 추출
-contour_shape, building_shape, road_region_shape, road_centerline_shape = (
-    read_shapefile_from_zip(path)
+# Process terrain
+mesh_points = ContourProcessor.create_points_for_mesh(contour_curves, RESOLUTION)
+terrain_mesh = ghcomp.DelaunayMesh(mesh_points)
+
+# Process buildings
+building_geometry_records = list(zip(building_data.geometry, building_data.records))
+building_breps = BuildingProcessor.create_building_breps(
+    building_geometry_records, terrain_mesh
 )
 
-contour_data = shp_importer.extract_data_from_shapefile(contour_shape)
-building_data = shp_importer.extract_data_from_shapefile(building_shape)
-road_region_data = shp_importer.extract_data_from_shapefile(road_region_shape)
-road_centerline_data = shp_importer.extract_data_from_shapefile(road_centerline_shape)
-
-# 2. shp 파일로부터 데이터 추출
-contour_data.geometry, contour_data.records
-contour_geometry_records = list(zip(contour_data.geometry, contour_data.records))
-building_geometry_records = list(zip(building_data.geometry, building_data.records))
-
-
-# 3. 추출한 데이터로 등고선, 지형, 건물, 도로, 도로 중심선 생성
-contour_crvs = create_contour_curves(contour_geometry_records)
-pts_for_mesh = create_points_for_mesh(contour_crvs, RESOLUTION)
-mesh_terrain = ghcomp.DelaunayMesh(pts_for_mesh)
-bldg_breps = create_building_breps(building_geometry_records, mesh_terrain)
-
-road_regions = [data[0] for data in road_region_data.geometry]
-road_centerlines = [data[0] for data in road_centerline_data.geometry]
+# Process road
+road_region_curves = [data[0] for data in road_region_data.geometry]
+road_centerline_curves = [data[0] for data in road_centerline_data.geometry]

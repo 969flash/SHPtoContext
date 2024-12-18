@@ -1,0 +1,81 @@
+{
+  "host": {
+    "name": "Rhino3D",
+    "version": "8.12.24282\u002B7001",
+    "os": "windows",
+    "arch": "x64"
+  },
+  "id": "802267d8-fb1a-40d5-b56a-63bfcbffdf7c",
+  "identity": {
+    "name": "Vworld to 3D model",
+    "version": "0.1-beta",
+    "publisher": {
+      "email": "bsh960flash@snu.ac.kr",
+      "name": "Byun Sanghoon"
+    },
+    "description": "\uD574\uB2F9 \uD504\uB85C\uC81D\uD2B8\uB294 \uD55C\uAD6D\uC5D0\uC11C\uB9CC \uC0AC\uC6A9 \uAC00\uB2A5\uD55C \uC11C\uBE44\uC2A4\uC785\uB2C8\uB2E4.",
+    "copyright": "Copyright \u00A9 2024 Byun Sanghoon",
+    "license": "MIT",
+    "image": {
+      "light": {
+        "type": "svg",
+        "data": "PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMHB0IDBwdCA0OHB0IDQ4cHQiIGZpbGwtZGFyaz0iI0ZGRiIgc3Ryb2tlLWRhcms9Im5vbmUiPg0KICA8Y2lyY2xlIGZpbGw9Im5vbmUiIGZpbGwtZGFyaz0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtZGFyaz0iIzAwMCIgcj0iNi43MDgyMDM3OTI1NzIwMjE1IiBjeD0iOS41IiBjeT0iOC41IiAvPg0KICA8Y2lyY2xlIGZpbGw9Im5vbmUiIGZpbGwtZGFyaz0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtZGFyaz0iIzAwMCIgcj0iMTguMjQ4Mjg3MjAwOTI3NzM0IiBjeD0iMjYuNSIgY3k9IjE3LjUiIC8\u002BDQogIDxjaXJjbGUgZmlsbD0ibm9uZSIgZmlsbC1kYXJrPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1kYXJrPSIjMDAwIiByPSIxNy4xMTcyNDI4MTMxMTAzNSIgY3g9IjE1LjUiIGN5PSIzOS41IiAvPg0KPC9zdmc\u002B"
+      },
+      "dark": {
+        "type": "svg",
+        "data": "PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMHB0IDBwdCA0OHB0IDQ4cHQiIGZpbGwtZGFyaz0iI0ZGRiIgc3Ryb2tlLWRhcms9Im5vbmUiPg0KICA8Y2lyY2xlIGZpbGw9Im5vbmUiIGZpbGwtZGFyaz0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtZGFyaz0iIzAwMCIgcj0iMjkiIGN4PSIxMy41IiBjeT0iMTIuNSIgLz4NCiAgPGNpcmNsZSBmaWxsPSJub25lIiBmaWxsLWRhcms9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWRhcms9IiMwMDAiIHI9IjEzLjAzODQwNDQ2NDcyMTY4IiBjeD0iMzEuNSIgY3k9IjMxLjUiIC8\u002BDQogIDxjaXJjbGUgZmlsbD0ibm9uZSIgZmlsbC1kYXJrPSJub25lIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1kYXJrPSIjMDAwIiByPSIxMS4wNDUzNjA1NjUxODU1NDciIGN4PSIyNC41IiBjeT0iMjEuNSIgLz4NCjwvc3ZnPg=="
+      },
+      "projectIcon": {
+        "light": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAdxJREFUSEullWlLFVEYgCfapISIImmzzRaSCloIgzJasaTFXFJbtRWSAi3UKBC/972P0R/tee6ZMc91Zpw794GH8965c8\u002BZ\u002B573vJM0cQbv4hXc4gW4idvxEj7BtziNL/AOHsU3uB9LuYWDeBFv4w/8hC72Ee/hDlyN946hkz/Dw5iLT\u002BIEq3mFvzD7J1V4h7mLLOLmEDYYwWNouvq80AKTGKVrG5qKjBM4EcJG3k1XKxxA9yjCCztDmDxHb5KH2BvClhhHN38FN\u002B8zHsQv2IGPsB/rcBnd1wgX\u002BYZ/cR5vYF2O4MsQxpzF4RC2xS70bKzhJJq/drGKchfwC8tM9uJx7MasAKri74ZCGLMb/\u002BAyemhM12u0yj6gZVuFrCNEXEPPwxRaBc104QDai9Y73c6zNYSB83g/hMkmnAthLlbbVyxa5CpeD2HAWs8mz\u002BhBU1TERlzADY1P/zmNpjTCkpoJYcQezK2EFEv6cQgbnMKsxUQ8wKIqseGZDje30wtN\u002BLSm1/aSWzXyPR2LMB2\u002BK9wXe75PaY9y8t\u002B4hD5IIT/TsQr70Bq3AR7CcziKpcymYx3suv6rUtpZwGpbd4H36VgHU\u002BThK\u002BVpOtbBxmiDLOUCrnk5VMCy9SVVQpL8A\u002BBNMBK62genAAAAAElFTkSuQmCC",
+          "width": 24,
+          "height": 24
+        },
+        "dark": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAdtJREFUSEu1le1KVFEUQCdC6EPKygqs1IogJaGgTKLIrFDpG9HS9IcVRRSY/lAihZ6gt\u002BgtfLjWuts701zvlzCzYDH7zsC55\u002Byz955Gh7mDjyPsDidwPcLu8RkHIuwOD/FehAfjEJ7Cy3jYLwq4i7MR1mcCN3AN3\u002BE2LmMvZhnFhQjr8RJn8Ejy1OIC/sKTyVMLT/g2wmqeY1XZ\u002BZLjESbcxFcRlnMN5yLMpR/d7W00XSkPcCrCctz5/QjbuIVfcBVNhWW5i2/wGJrSMaxkCYcibPIMTVtf8tTiPT7Br/gbe7CS12g\u002BU1y86D7sXrt4GP/iaazEen4aYZIWd56HabF87RPvwk19x1ps4VE059m0pPhih9xVXPELqH0PZ/En\u002BoI8pjHt2g94JsLGDSw68T7cnXl1MVNlaTpv5jFd3GoaiTDBu1iMsBono6U4jh7dxR7hFRR37oL/cx1rd7OXZ7dmsRRd3EbLMomeMuHi3mcZtr5DLMUFHH6Xkqf9fMRmqX5Cb98Z7jjOw6lpA5mib\u002BgLPFke/mbTtWHHWvNWyw7\u002BQLvTztzce3Y0/MHzWISLayn\u002BmVjzg3gO7YMUj\u002B0JXqCl6OV6oS5qWjr2h28TWeeWotXihdYaDx2m0fgH39wwEjzjB48AAAAASUVORK5CYII=",
+          "width": 24,
+          "height": 24
+        },
+        "icoData": "AAABAAEAGBgAAAEAIACYAgAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAYAAAAGAgGAAAA4Hc9\u002BAAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAI6SURBVEhLpdXbi01hGMfx5SyjMMppxiGHSRiEcijnY9yYwgUlU5MLmTsuUO7c\u002BgdccSmXyi2iqEm5UOQQxUQ5nw8l3\u002B/7ztqz1raX1tp\u002B9Zn9rNXs/a71rnc975Akn05Mwyf04Sc24xYWYAZa8Ru/8BKPsAlX8AK5ZAfYgtHwSxOwCu9wB0vwDDfxAWlWYA5uYOPA51P8lW3YGctaDuEsRoajcjmMWbHM5yRGxDJkL7yy7VjtiQo5gLZYJslQjMFHOKemAw72GG8xFlVyDTtiGQf4im9w3s1KXI9leOD9sSyd5/A3Z3vgAOYSDmI6JuI1duM97qFqnmCuxTD/kB\u002B4Dx/sUjj//tNVNBMXxiLcDUeZLMaeWP5XnIUei3SK0ngn2dXUbHyfQuoH\u002BIz03FTMg29vugDKxpXpCqw9gzSjcATLMQXjMB\u002B2CVeXb36ZVbUGto3\u002BbKtYB5\u002BBS8yVcxvZTMYytOM87FNFOYpzcMpD/OKuWCbDcSyWDeNdHUdRC1mLDbGMWY/0x9O4hu0rRXFqT6C\u002BGzuV3bEcjEuqN5a5TEJYagVxOrtiGeKz2h/LwXglW3EZ3z2RyRfYmh3EPmW/ys77K9gIXXW2\u002BvG4iFy8xVM4E44ax4uw1/uGu1e42Ti4G497hucuwObYMKcHPsvE5ue7sRAz4Ua0D4Xx9ryasvEdeAiXsTvcG/xzQ6p/k6um1hKK4gC2h2bTAu\u002BiMA6Q3cSrxnVvWy\u002BMAzinbvpV41bqu/IgHDVMkvwBS9tfVUb9/SYAAAAASUVORK5CYII="
+      },
+      "categoryIcon": {
+        "light": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAARRJREFUOE\u002BNkklKxUAQQFtUnHDAhQsRXQgqKi5cCS6\u002BI844rwQP4Ak8hWf2vVQn5sd8kgePqibp7qSqUmYa7/EF1/ACX/EWr7M\u002Be8dNHGIMfTherFL6xr1IW9nHg0iDXdyJtLh5EZ\u002BL1WiOcDXSlDbwEGfxBifwDrt4y7HgHD9z9N\u002BnsIsHnIw0\u002BED/z5r04RhXIg2s\u002BFykvbjEpUgDC/OFtsquWEgLPArfqXDzCT4Vqz\u002B20YPKFpdY8KtIY/N6pMWQWIc61qR5sL87E2njU8Ah8dA6y3iG3uzmeax4zLGOQ2KfHW\u002BrbcF\u002B0M\u002Bubi45zbEN\u002B2yrrLaH/dssWzl24ZAtRDrMIMcunLzWIetzgG1sdgJS\u002BgVowRURoOq7TwAAAABJRU5ErkJggg==",
+          "width": 16,
+          "height": 16
+        },
+        "dark": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAQVJREFUOE\u002BdkslKxEAQQBsX3AVFGFQQFAQ9iBc9iR48jPvuxa/RH9Bv9r2UJc0kueTBoyudqVRV95SBvP6tg3nEuQiHcYCHEfZzim/4jDe4iMkWnkXYzTWOImxYwDGuNE\u002BlbOB5hG2sXCfLNJpsN7KPxxG2se3EyvfoodnVFz7hLa5hJ1nF5Ae0enKJq/iN82504YFl5TpZ7G4bL/DOjS487Su0es0R7mGO6FhTEbbZxE/0I7btP89kq\u002BbsdrocYRtbN3kWl9wAE9YjbPjv4CSDCTwDP\u002BD7F6yrzaA30bCDzqXvaKLrB/7gLtaYbPXeW/AGEn/k3CY4gquVe5P7cERHmBi1lF93thUd3uDXTgAAAABJRU5ErkJggg==",
+          "width": 16,
+          "height": 16
+        }
+      }
+    }
+  },
+  "settings": {
+    "buildPath": "build/",
+    "buildTarget": {
+      "host": {
+        "name": "Rhino3D",
+        "version": "8.11"
+      },
+      "title": "Rhino3D (8.11)",
+      "slug": "rh8_11"
+    },
+    "publishTarget": {
+      "title": "McNeel Yak \uC11C\uBC84"
+    }
+  },
+  "codes": [
+    {
+      "type": "components",
+      "id": "a6f4a3d2-c1c9-4997-8708-3ff75ed8f169",
+      "language": {
+        "id": "*.gh1.grasshopper",
+        "version": "1.*.*"
+      },
+      "title": "main.gh",
+      "uri": "main.gh"
+    }
+  ]
+}

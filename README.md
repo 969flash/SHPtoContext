@@ -1,6 +1,15 @@
 준비물
 1. Rhino 8
 2. pyshp (https://github.com/hiteca/ghshp#install-pyshp)
+
+Install pyshp
+
+Plugin developed for using in native python environment while Grasshopper is using IronPython. So installation of the module requires a bit of creativity.
+
+Download pyshp zip achive https://github.com/GeospatialPython/pyshp/archive/1.2.12.zip
+
+Extract it to C:\Users\%USERNAME%\AppData\Roaming\McNeel\Rhinoceros\8.0\scripts. Final path to shapefile.py should be ...Rhinoceros\8.0\scripts\shapefile.py
+
 3. Vworld로 부터 5000:1 수치지형도 ver2.0 을 다운받는다(zip file). (https://map.vworld.kr/map/dtkmap.do?mode=MAPW201)
 ![image](https://github.com/user-attachments/assets/5b7d5a8a-bb0c-4c62-847d-29e8e68b6184)
 
