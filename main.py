@@ -42,32 +42,51 @@ class ShapefileHandler:
     A class to manage Shapefile operations.
     """
 
-    def __init__(self, zip_path: str):
-        self.zip_path = zip_path
-        self.zip_file = zipfile.ZipFile(zip_path, "r")
+    def __init__(self, zip_paths: List[str]):
+        self.zip_files = [zipfile.ZipFile(zip_path, "r") for zip_path in zip_paths]
 
-    def read_shapefile(self, file_prefixes: List[str]) -> Optional[shapefile.Reader]:
+    def read_shapefile(self, file_prefixes: List[str]) -> List[shapefile.Reader]:
         """
-        Attempts to read a shapefile from the zip archive using a list of prefixes.
+        Attempts to read shapefiles from the zip archives using a list of prefixes.
         """
-        for prefix in file_prefixes:
-            try:
-                return shapefile.Reader(
-                    shp=self.zip_file.open(f"{prefix}.shp"),
-                    shx=self.zip_file.open(f"{prefix}.shx"),
-                    dbf=self.zip_file.open(f"{prefix}.dbf"),
-                    prj=self.zip_file.open(f"{prefix}.prj"),
-                )
-            except KeyError:
-                continue
-        return None
+        readers = []
+        for zip_file in self.zip_files:
+            for prefix in file_prefixes:
+                try:
+                    readers.append(
+                        shapefile.Reader(
+                            shp=zip_file.open(f"{prefix}.shp"),
+                            shx=zip_file.open(f"{prefix}.shx"),
+                            dbf=zip_file.open(f"{prefix}.dbf"),
+                            prj=zip_file.open(f"{prefix}.prj"),
+                        )
+                    )
+                except KeyError:
+                    continue
+        return readers
 
-    def extract_data(self, shapefile: shapefile.Reader) -> "ShpData":
+    def extract_data(self, shapefiles: List[shapefile.Reader]) -> "ShpData":
         """
-        Extracts data from a shapefile.
+        Extracts data from a list of shapefiles.
         """
-        result = ShapefileParser.read_shapefile(shapefile)
-        return ShpData(*result)
+        all_geometry = []
+        all_fields = []
+        all_field_names = []
+        all_records = []
+        shape_type = None
+
+        for sf in shapefiles:
+            result = ShapefileParser.read_shapefile(sf)
+            if shape_type is None:
+                shape_type = result[0]
+            all_geometry.extend(result[1])
+            all_fields.extend(result[2])
+            all_field_names.extend(result[3])
+            all_records.extend(result[4])
+
+        return ShpData(
+            shape_type, all_geometry, all_fields, all_field_names, all_records
+        )
 
 
 class ShpData:
@@ -243,20 +262,20 @@ class BuildingProcessor:
         return breps
 
 
-# path -> parameter of the component in grasshopper that is the path to the zip file
+# paths -> parameter of the component in grasshopper that is the path to the zip files
 
 # Main workflow
-handler = ShapefileHandler(path)
-contour_shape = handler.read_shapefile(["N1L_F0010000", "N3L_F0010000"])
-building_shape = handler.read_shapefile(["N1A_B0010000", "N3A_B0010000"])
-road_region_shape = handler.read_shapefile(["N3A_A0010000"])
-road_centerline_shape = handler.read_shapefile(["N3L_A0020000"])
+handler = ShapefileHandler(paths)
+contour_shapes = handler.read_shapefile(["N1L_F0010000", "N3L_F0010000"])
+building_shapes = handler.read_shapefile(["N1A_B0010000", "N3A_B0010000"])
+road_region_shapes = handler.read_shapefile(["N3A_A0010000"])
+road_centerline_shapes = handler.read_shapefile(["N3L_A0020000"])
 
 # Extract data
-contour_data = handler.extract_data(contour_shape)
-building_data = handler.extract_data(building_shape)
-road_region_data = handler.extract_data(road_region_shape)
-road_centerline_data = handler.extract_data(road_centerline_shape)
+contour_data = handler.extract_data(contour_shapes)
+building_data = handler.extract_data(building_shapes)
+road_region_data = handler.extract_data(road_region_shapes)
+road_centerline_data = handler.extract_data(road_centerline_shapes)
 
 # Process contour
 contour_geometry_records = list(zip(contour_data.geometry, contour_data.records))
