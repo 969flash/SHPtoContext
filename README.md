@@ -1,3 +1,15 @@
+"Feb 18, 2025"
+더 쉬운 설치방법 :
+1. Rhino 8 (라이노7 혹은 라이노8 초기버전은 안된다) 설치
+2. PackageMangaer 명령어 실행
+3. VworldTo3D 설치
+-  ![image](https://github.com/user-attachments/assets/8095951b-21fb-49d1-adc0-35abc9032ffd)
+4. 라이노 재실행
+5. Grasshopper 실행 후 VworldTo3D 탭 확인후 컴퍼넌트 사용
+6. zip 파일(여러 파일도 상관없음)을 링크한 파일 컴퍼넌트 연결 후 사용
+
+"Dec 18, 2024 "
+
 준비물
 1. Rhino 8
 2. pyshp (https://github.com/hiteca/ghshp#install-pyshp)
