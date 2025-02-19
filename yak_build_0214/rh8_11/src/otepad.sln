@@ -1,0 +1,18 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{802267d8-fb1a-40d5-b56a-63bfcbffdf7c}") = "otepad.Components", "otepad.Components\otepad.Components.csproj", "{17edee75-609c-4558-90bd-9d0952a3a954}"
+EndProject
+
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17edee75-609c-4558-90bd-9d0952a3a954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17edee75-609c-4558-90bd-9d0952a3a954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17edee75-609c-4558-90bd-9d0952a3a954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17edee75-609c-4558-90bd-9d0952a3a954}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

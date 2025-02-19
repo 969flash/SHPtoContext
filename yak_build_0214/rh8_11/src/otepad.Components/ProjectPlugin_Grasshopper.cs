@@ -1,0 +1,120 @@
+using System;
+using System.IO;
+using System.Text;
+using SD = System.Drawing;
+
+using Rhino;
+using Grasshopper.Kernel;
+
+namespace RhinoCodePlatform.Rhino3D.Projects.Plugin.GH
+{
+  public sealed class AssemblyInfo : GH_AssemblyInfo
+  {
+    static readonly string s_assemblyIconData = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAdxJREFUSEullWlLFVEYgCfapISIImmzzRaSCloIgzJasaTFXFJbtRWSAi3UKBC/972P0R/tee6ZMc91Zpw794GH8965c8+Z+573vJM0cQbv4hXc4gW4idvxEj7BtziNL/AOHsU3uB9LuYWDeBFv4w/8hC72Ee/hDlyN946hkz/Dw5iLT+IEq3mFvzD7J1V4h7mLLOLmEDYYwWNouvq80AKTGKVrG5qKjBM4EcJG3k1XKxxA9yjCCztDmDxHb5KH2BvClhhHN38FN+8zHsQv2IGPsB/rcBnd1wgX+YZ/cR5vYF2O4MsQxpzF4RC2xS70bKzhJJq/drGKchfwC8tM9uJx7MasAKri74ZCGLMb/+AyemhM12u0yj6gZVuFrCNEXEPPwxRaBc104QDai9Y73c6zNYSB83g/hMkmnAthLlbbVyxa5CpeD2HAWs8mz+hBU1TERlzADY1P/zmNpjTCkpoJYcQezK2EFEv6cQgbnMKsxUQ8wKIqseGZDje30wtN+LSm1/aSWzXyPR2LMB2+K9wXe75PaY9y8t+4hD5IIT/TsQr70Bq3AR7CcziKpcymYx3suv6rUtpZwGpbd4H36VgHU+ThK+VpOtbBxmiDLOUCrnk5VMCy9SVVQpL8A+BNMBK62genAAAAAElFTkSuQmCC";
+    static readonly string s_categoryIconData = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAARRJREFUOE+NkklKxUAQQFtUnHDAhQsRXQgqKi5cCS6+I844rwQP4Ak8hWf2vVQn5sd8kgePqibp7qSqUmYa7/EF1/ACX/EWr7M+e8dNHGIMfTherFL6xr1IW9nHg0iDXdyJtLh5EZ+L1WiOcDXSlDbwEGfxBifwDrt4y7HgHD9z9N+nsIsHnIw0+ED/z5r04RhXIg2s+FykvbjEpUgDC/OFtsquWEgLPArfqXDzCT4Vqz+20YPKFpdY8KtIY/N6pMWQWIc61qR5sL87E2njU8Ah8dA6y3iG3uzmeax4zLGOQ2KfHW+rbcF+0M+ubi45zbEN+2yrrLaH/dssWzl24ZAtRDrMIMcunLzWIetzgG1sdgJS+gVowRURoOq7TwAAAABJRU5ErkJggg==";
+
+    public static readonly SD.Bitmap PluginIcon = default;
+    public static readonly SD.Bitmap PluginCategoryIcon = default;
+
+    static AssemblyInfo()
+    {
+      if (!s_assemblyIconData.Contains("ASSEMBLY-ICON"))
+      {
+        using (var aicon = new MemoryStream(Convert.FromBase64String(s_assemblyIconData)))
+          PluginIcon = new SD.Bitmap(aicon);
+      }
+
+      if (!s_categoryIconData.Contains("ASSEMBLY-CATEGORY-ICON"))
+      {
+        using (var cicon = new MemoryStream(Convert.FromBase64String(s_categoryIconData)))
+          PluginCategoryIcon = new SD.Bitmap(cicon);
+      }
+    }
+
+    public override Guid Id { get; } = new Guid("802267d8-fb1a-40d5-b56a-63bfcbffdf7c");
+
+    public override string AssemblyName { get; } = "otepad.Components";
+    public override string AssemblyVersion { get; } = "0.1.2.9177";
+    public override string AssemblyDescription { get; } = "Only Available in Korea , it's for V-World .shp file zip file ";
+    public override string AuthorName { get; } = "Byun Sanghoon";
+    public override string AuthorContact { get; } = "bsh960flash@snu.ac.kr";
+    public override GH_LibraryLicense AssemblyLicense { get; } = GH_LibraryLicense.unset;
+    public override SD.Bitmap AssemblyIcon { get; } = PluginIcon;
+  }
+
+  public class ProjectComponentPlugin : GH_AssemblyPriority
+  {
+    static readonly Guid s_projectId = new Guid("802267d8-fb1a-40d5-b56a-63bfcbffdf7c");
+    static readonly string s_projectData = "ew0KICAiaG9zdCI6IHsNCiAgICAibmFtZSI6ICJSaGlubzNEIiwNCiAgICAidmVyc2lvbiI6ICI4LjE2LjI1MDQyXHUwMDJCMTMwMDEiLA0KICAgICJvcyI6ICJ3aW5kb3dzIiwNCiAgICAiYXJjaCI6ICJ4NjQiDQogIH0sDQogICJpZCI6ICI4MDIyNjdkOC1mYjFhLTQwZDUtYjU2YS02M2JmY2JmZmRmN2MiLA0KICAiaWRlbnRpdHkiOiB7DQogICAgIm5hbWUiOiAib3RlcGFkIiwNCiAgICAidmVyc2lvbiI6ICIwLjEuMiIsDQogICAgInB1Ymxpc2hlciI6IHsNCiAgICAgICJlbWFpbCI6ICJic2g5NjBmbGFzaEBzbnUuYWMua3IiLA0KICAgICAgIm5hbWUiOiAiQnl1biBTYW5naG9vbiINCiAgICB9LA0KICAgICJkZXNjcmlwdGlvbiI6ICJPbmx5IEF2YWlsYWJsZSBpbiBLb3JlYSAsIGl0XHUwMDI3cyBmb3IgVi1Xb3JsZCAuc2hwIGZpbGUgemlwIGZpbGUgIiwNCiAgICAiY29weXJpZ2h0IjogIkNvcHlyaWdodCBcdTAwQTkgMjAyNCBCeXVuIFNhbmdob29uIiwNCiAgICAibGljZW5zZSI6ICJNSVQiLA0KICAgICJpbWFnZSI6IHsNCiAgICAgICJsaWdodCI6IHsNCiAgICAgICAgInR5cGUiOiAic3ZnIiwNCiAgICAgICAgImRhdGEiOiAiUEhOMlp5QjNhV1IwYUQwaU5EZ2lJR2hsYVdkb2REMGlORGdpSUhabGNuTnBiMjQ5SWpFdU1TSWdlRzFzYm5NOUltaDBkSEE2THk5M2QzY3Vkek11YjNKbkx6SXdNREF2YzNabklpQjRiV3h1Y3pwNGJHbHVhejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TVRrNU9TOTRiR2x1YXlJZ2RtbGxkMEp2ZUQwaU1IQjBJREJ3ZENBME9IQjBJRFE0Y0hRaUlHWnBiR3d0WkdGeWF6MGlJMFpHUmlJZ2MzUnliMnRsTFdSaGNtczlJbTV2Ym1VaVBnMEtJQ0E4WTJseVkyeGxJR1pwYkd3OUltNXZibVVpSUdacGJHd3RaR0Z5YXowaWJtOXVaU0lnYzNSeWIydGxQU0lqTURBd0lpQnpkSEp2YTJVdFpHRnlhejBpSXpBd01DSWdjajBpTmk0M01EZ3lNRE0zT1RJMU56SXdNakUxSWlCamVEMGlPUzQxSWlCamVUMGlPQzQxSWlBdlBnMEtJQ0E4WTJseVkyeGxJR1pwYkd3OUltNXZibVVpSUdacGJHd3RaR0Z5YXowaWJtOXVaU0lnYzNSeWIydGxQU0lqTURBd0lpQnpkSEp2YTJVdFpHRnlhejBpSXpBd01DSWdjajBpTVRndU1qUTRNamczTWpBd09USTNOek0wSWlCamVEMGlNall1TlNJZ1kzazlJakUzTGpVaUlDOFx1MDAyQkRRb2dJRHhqYVhKamJHVWdabWxzYkQwaWJtOXVaU0lnWm1sc2JDMWtZWEpyUFNKdWIyNWxJaUJ6ZEhKdmEyVTlJaU13TURBaUlITjBjbTlyWlMxa1lYSnJQU0lqTURBd0lpQnlQU0l4Tnk0eE1UY3lOREk0TVRNeE1UQXpOU0lnWTNnOUlqRTFMalVpSUdONVBTSXpPUzQxSWlBdlBnMEtQQzl6ZG1jXHUwMDJCIg0KICAgICAgfSwNCiAgICAgICJkYXJrIjogew0KICAgICAgICAidHlwZSI6ICJzdmciLA0KICAgICAgICAiZGF0YSI6ICJQSE4yWnlCM2FXUjBhRDBpTkRnaUlHaGxhV2RvZEQwaU5EZ2lJSFpsY25OcGIyNDlJakV1TVNJZ2VHMXNibk05SW1oMGRIQTZMeTkzZDNjdWR6TXViM0puTHpJd01EQXZjM1puSWlCNGJXeHVjenA0YkdsdWF6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNVGs1T1M5NGJHbHVheUlnZG1sbGQwSnZlRDBpTUhCMElEQndkQ0EwT0hCMElEUTRjSFFpSUdacGJHd3RaR0Z5YXowaUkwWkdSaUlnYzNSeWIydGxMV1JoY21zOUltNXZibVVpUGcwS0lDQThZMmx5WTJ4bElHWnBiR3c5SW01dmJtVWlJR1pwYkd3dFpHRnlhejBpYm05dVpTSWdjM1J5YjJ0bFBTSWpNREF3SWlCemRISnZhMlV0WkdGeWF6MGlJekF3TUNJZ2NqMGlNamtpSUdONFBTSXhNeTQxSWlCamVUMGlNVEl1TlNJZ0x6NE5DaUFnUEdOcGNtTnNaU0JtYVd4c1BTSnViMjVsSWlCbWFXeHNMV1JoY21zOUltNXZibVVpSUhOMGNtOXJaVDBpSXpBd01DSWdjM1J5YjJ0bExXUmhjbXM5SWlNd01EQWlJSEk5SWpFekxqQXpPRFF3TkRRMk5EY3lNVFk0SWlCamVEMGlNekV1TlNJZ1kzazlJak14TGpVaUlDOFx1MDAyQkRRb2dJRHhqYVhKamJHVWdabWxzYkQwaWJtOXVaU0lnWm1sc2JDMWtZWEpyUFNKdWIyNWxJaUJ6ZEhKdmEyVTlJaU13TURBaUlITjBjbTlyWlMxa1lYSnJQU0lqTURBd0lpQnlQU0l4TVM0d05EVXpOakExTmpVeE9EVTFORGNpSUdONFBTSXlOQzQxSWlCamVUMGlNakV1TlNJZ0x6NE5Dand2YzNablBnPT0iDQogICAgICB9LA0KICAgICAgInByb2plY3RJY29uIjogew0KICAgICAgICAibGlnaHQiOiB7DQogICAgICAgICAgImJ5dGVzIjogImlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFCZ0FBQUFZQ0FZQUFBRGdkejM0QUFBQUJHZEJUVUVBQUxHUEMveGhCUUFBQUFsd1NGbHpBQUFPd2dBQURzSUJGU2hLZ0FBQUFkeEpSRUZVU0V1bGxXbExGVkVZZ0NmYXBJU0lJbW16elJhU0Nsb0lnekphc2FURlhGSmJ0UldTQWkzVUtCQy85NzJQMFIvdGVlNlpNYzkxWnB3Nzk0R0g4OTY1YzhcdTAwMkJaXHUwMDJCNTczdkpNMGNRYnY0aFhjNGdXNGlkdnhFajdCdHppTkwvQU9Ic1UzdUI5THVZV0RlQkZ2NHcvOGhDNzJFZS9oRGx5Tjk0Nmhrei9EdzVpTFRcdTAwMkJJRXEzbUZ2ekQ3SjFWNGg3bUxMT0xtRURZWXdXTm91dnE4MEFLVEdLVnJHNXFLakJNNEVjSkczazFYS3h4QTl5akNDenREbUR4SGI1S0gyQnZDbGhoSE4zOEZOXHUwMDJCOHpIc1F2MklHUHNCL3JjQm5kMXdnWFx1MDAyQllaL2NSNXZZRjJPNE1zUXhwekY0UkMyeFM3MGJLemhKSnEvZHJHS2NoZndDOHRNOXVKeDdNYXNBS3JpNzRaQ0dMTWIvXHUwMDJCQXllbWhNMTJ1MHlqNmdaVnVGckNORVhFUFB3eFJhQmMxMDRRRGFpOVk3M2M2ek5ZU0I4M2cvaE1rbW5BdGhMbGJiVnl4YTVDcGVEMkhBV3M4bXpcdTAwMkJoQlUxVEVSbHpBRFkxUC96bU5walRDa3BvSlljUWV6SzJFRkV2NmNRZ2JuTUtzeFVROHdLSXFzZUdaRGplMzB3dE5cdTAwMkJMU20xL2FTV3pYeVBSMkxNQjJcdTAwMkJLOXdYZTc1UGFZOXk4dFx1MDAyQjRoRDVJSVQvVHNRcjcwQnEzQVI3Q2N6aUtwY3ltWXgzc3V2NnJVdHBad0dwYmQ0SDM2VmdIVVx1MDAyQlRoS1x1MDAyQlZwT3RiQnhtaURMT1VDcm5rNVZNQ3k5U1ZWUXBMOEFcdTAwMkJCTk1CSzYyZ2VuQUFBQUFFbEZUa1N1UW1DQyIsDQogICAgICAgICAgIndpZHRoIjogMjQsDQogICAgICAgICAgImhlaWdodCI6IDI0DQogICAgICAgIH0sDQogICAgICAgICJkYXJrIjogew0KICAgICAgICAgICJieXRlcyI6ICJpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBQmdBQUFBWUNBWUFBQURnZHozNEFBQUFCR2RCVFVFQUFMR1BDL3hoQlFBQUFBbHdTRmx6QUFBT3dnQUFEc0lCRlNoS2dBQUFBZHRKUkVGVVNFdTFsZTFLVkZFVVFDZEM2RVBLeWdxczFJb2dKYUdnVEtMSXJGRHBHOUhTOUljVlJSU1kvbEFpaFo2Z3RcdTAwMkJndGZMald1dHM3MDF6dmx6Q3pZREg3enNDNTVcdTAwMkJ5ejk1NUdoN21EanlQc0RpZHdQY0x1OFJrSEl1d09EL0ZlaEFmakVKN0N5M2pZTHdxNGk3TVIxbWNDTjNBTjNcdTAwMkJFMkxtTXZaaG5GaFFqcjhSSm44RWp5MU9JQy9zS1R5Vk1MVC9nMndtcWVZMVhaXHUwMDJCWkxqRVNiY3hGY1Jsbk1ONXlMTXBSL2Q3VzAwWFNrUGNDckNjdHo1L1FqYnVJVmZjQlZOaFdXNWkyL3dHSnJTTWF4a0NZY2liUElNVFZ0Zjh0VGlQVDdCci9nYmU3Q1MxMmdcdTAwMkJVMXk4NkQ3c1hydDRHUC9pYWF6RWVuNGFZWklXZDU2SGFiRjg3UlB2d2sxOXgxcHM0VkUwNTltMHBQaGloOXhWWFBFTHFIMFBaL0VuXHUwMDJCb0k4cGpIdDJnOTRKc0xHRFN3NjhUN2NuWGwxTVZObGFUcHY1akZkM0dvYWlUREJ1MWlNc0Jvbm82VTRqaDdkeFI3aEZSUjM3b0wvY3gxcmQ3T1haN2Rtc1JSZDNFYkxNb21lTXVIaTNtY1p0cjVETE1VRkhINlhrcWY5Zk1SbXFYNUNiOThaN2pqT3c2bHBBNW1pYlx1MDAyQmdMUEZrZS9tYlR0V0hIV3ZOV3l3N1x1MDAyQlFMdlR6dHpjZTNZMC9NSHpXSVNMYXluXHUwMDJCbVZqemczZ083WU1Valx1MDAyQjBKWHFDbDZPVjZvUzVxV2pyMmgyOFRXZWVXb3RYaWhkWWFEeDJtMGZnSDM5d3dFanpqQjQ4QUFBQUFTVVZPUks1Q1lJST0iLA0KICAgICAgICAgICJ3aWR0aCI6IDI0LA0KICAgICAgICAgICJoZWlnaHQiOiAyNA0KICAgICAgICB9LA0KICAgICAgICAiaWNvRGF0YSI6ICJBQUFCQUFFQUdCZ0FBQUVBSUFDWUFnQUFGZ0FBQUlsUVRrY05DaG9LQUFBQURVbElSRklBQUFBWUFBQUFHQWdHQUFBQTRIYzlcdTAwMkJBQUFBQVJuUVUxQkFBQ3hqd3Y4WVFVQUFBQUpjRWhaY3dBQURzSUFBQTdDQVJVb1NvQUFBQUk2U1VSQlZFaExwZFhiaTAxaEdNZng1U3lqTU1wcHhpR0hTUmlFY2lqblk5eVl3Z1VsVTVNTG1Uc3VVTzdjXHUwMDJCZ2RjY1NtWHlpMmlxRW01VU9RUXhVUTVudzhsM1x1MDAyQi83enRxejFyYVgxdHBcdTAwMkI5Wm45ck5Ycy9hNzFybmM5NzVBa24wNU13eWYwNFNjMjR4WVdZQVphOFJ1LzhCS1BzQWxYOEFLNVpBZllndEh3U3hPd0N1OXdCMHZ3RERmeEFXbFdZQTV1WU9QQTUxUDhsVzNZR2N0YUR1RXNSb2FqY2ptTVdiSE01eVJHeERKa0w3eXk3Vmp0aVFvNWdMWllKc2xRak1GSE9LZW1BdzcyR0c4eEZsVnlEVHRpR1FmNGltOXczczFLWEk5bGVPRDlzU3lkNS9BM1ozdmdBT1lTRG1JNkp1STFkdU05N3FGcW5tQ3V4VEQva0JcdTAwMkI0RHgvc1Vqai8vdE5WTkJNWHhpTGNEVWVaTE1hZVdQNVhuSVVlaTNTSzBuZ24yZFhVYkh5ZlF1b0hcdTAwMkJJejAzRlRNZzI5dnVnREt4cFhwQ3F3OWd6U2pjQVRMTVFYak1CXHUwMDJCMkNWZVhiMzZaVmJVR3RvM1x1MDAyQmJLdFlCNVx1MDAyQkJTOHlWY3h2WlRNWXl0T004N0ZORk9ZcHpjTXBEL09LdVdDYkRjU3lXRGVOZEhVZFJDMW1MRGJHTVdZLzB4OU80aHUwclJYRnFUNkNcdTAwMkJHenVWM2JFY2pFdXFONWE1VEVKWWFnVnhPcnRpR2VLejJoL0x3WGdsVzNFWjN6MlJ5UmZZbWgzRVBtVy95czc3SzlnSVhYVzJcdTAwMkJ2RzRpRnk4eFZNNEU0NGF4NHV3MS91R3UxZTQyVGk0RzQ5N2h1Y3V3T2JZTUtjSFBzdkU1dWU3c1JBejRVYTBENFh4OXJ5YXN2RWRlQWlYc1R2Y0cveHpRNnAvazZ1bTFoS0s0Z0MyaDJiVEF1XHUwMDJCaU1BNlEzY1NyeG5Wdld5XHUwMDJCTUF6aW5idnBWNDFicXUvSWdIRFZNa3Z3QlM5dGZWVWI5L1NZQUFBQUFTVVZPUks1Q1lJST0iDQogICAgICB9LA0KICAgICAgImNhdGVnb3J5SWNvbiI6IHsNCiAgICAgICAgImxpZ2h0Ijogew0KICAgICAgICAgICJieXRlcyI6ICJpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBQkFBQUFBUUNBWUFBQUFmOC85aEFBQUFCR2RCVFVFQUFMR1BDL3hoQlFBQUFBbHdTRmx6QUFBT3dnQUFEc0lCRlNoS2dBQUFBUlJKUkVGVU9FXHUwMDJCTmtrbEt4VUFRUUZ0VW5IREFoUXNSWFFncUtpNWNDUzZcdTAwMkJJODQ0cndRUDRBazhoV2YydlZRbjVzZDhrZ2VQcWlicDdxU3FVbVlhNy9FRjEvQUNYL0VXcjdNXHUwMDJCZThkTkhHSU1mVGhlckZMNnhyMUlXOW5IZzBpRFhkeUp0TGg1RVpcdTAwMkJMMVdpT2NEWFNsRGJ3RUdmeEJpZndEcnQ0eTdIZ0hEOXo5Tlx1MDAyQm5zSXNIbkl3MFx1MDAyQkVEL3o1cjA0UmhYSWcyc1x1MDAyQkZ5a3ZiakVwVWdEQy9PRnRzcXVXRWdMUEFyZnFYRHpDVDRWcXpcdTAwMkIyMFlQS0ZwZFk4S3RJWS9ONnBNV1FXSWM2MXFSNXNMODdFMm5qVThBaDhkQTZ5M2lHM3V6bWVheDR6TEdPUTJLZkhXXHUwMDJCcmJjRlx1MDAyQjBNXHUwMDJCdWJpNDV6YkVOXHUwMDJCMnlyckxhSC9kc3NXemwyNFpBdFJEck1JTWN1bkx6V0lldHpnRzFzZGdKU1x1MDAyQmdWb3dSVVJvT3E3VHdBQUFBQkpSVTVFcmtKZ2dnPT0iLA0KICAgICAgICAgICJ3aWR0aCI6IDE2LA0KICAgICAgICAgICJoZWlnaHQiOiAxNg0KICAgICAgICB9LA0KICAgICAgICAiZGFyayI6IHsNCiAgICAgICAgICAiYnl0ZXMiOiAiaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUJBQUFBQVFDQVlBQUFBZjgvOWhBQUFBQkdkQlRVRUFBTEdQQy94aEJRQUFBQWx3U0ZsekFBQU93Z0FBRHNJQkZTaEtnQUFBQVFWSlJFRlVPRVx1MDAyQmRrc2xLeEVBUVFCc1gzQVZGR0ZRUUZBUTlpQmM5aVI0OGpQdnV4YS9SSDlCdjlyMlVKYzBrdWVUQm95dWRxVlJWOTVTQnZQNnRnM25FdVFpSGNZQ0hFZlp6aW0vNGpEZTRpTWtXbmtYWXpUV09JbXhZd0RHdU5FXHUwMDJCbGJPQjVoRzJzWENmTE5KcHNON0tQeHhHMnNlM0V5dmZvb2RuVkZ6N2hMYTVoSjFuRjVBZTBlbktKcS9pTjgyNTA0WUZsNVRwWjdHNGJML0RPalM0ODdTdTBlczBSN21HTzZGaFRFYmJaeEUvMEk3YnRQODlrcVx1MDAyQmJzZHJvY1lSdGJOM2tXbDl3QUU5WWpiUGp2NENTRENUd0RQXHUwMDJCRDdGNnlyemFBMzBiQ0R6cVh2YUtMckIvN2dMdGFZYlBYZVcvQUdFbi9rM0NZNGdxdVZlNVA3Y0VSSG1CaTFsRjkzdGhVZDN1RFhUZ0FBQUFCSlJVNUVya0pnZ2c9PSIsDQogICAgICAgICAgIndpZHRoIjogMTYsDQogICAgICAgICAgImhlaWdodCI6IDE2DQogICAgICAgIH0NCiAgICAgIH0NCiAgICB9DQogIH0sDQogICJzZXR0aW5ncyI6IHsNCiAgICAiYnVpbGRQYXRoIjogImZpbGU6Ly8vQzovVXNlcnMvYnNoOTYvRG9jdW1lbnRzL0dpdEh1Yi9TSFB0b0NvbnRleHQvYnVpbGQvcmg4XzExIiwNCiAgICAiYnVpbGRUYXJnZXQiOiB7DQogICAgICAiaG9zdCI6IHsNCiAgICAgICAgIm5hbWUiOiAiUmhpbm8zRCIsDQogICAgICAgICJ2ZXJzaW9uIjogIjguMTEiDQogICAgICB9LA0KICAgICAgInRpdGxlIjogIlJoaW5vM0QgKDguMTEpIiwNCiAgICAgICJzbHVnIjogInJoOF8xMSINCiAgICB9LA0KICAgICJwdWJsaXNoVGFyZ2V0Ijogew0KICAgICAgInRpdGxlIjogIk1jTmVlbCBZYWsgXHVDMTFDXHVCQzg0Ig0KICAgIH0NCiAgfSwNCiAgImNvZGVzIjogW10NCn0=";
+    static readonly dynamic s_projectServer = default;
+    static readonly object s_project = default;
+
+    static ProjectComponentPlugin()
+    {
+      s_projectServer = ProjectInterop.GetProjectServer();
+      if (s_projectServer is null)
+      {
+        RhinoApp.WriteLine($"Error loading Grasshopper plugin. Missing Rhino3D platform");
+        return;
+      }
+
+      // get project
+      dynamic dctx = ProjectInterop.CreateInvokeContext();
+      dctx.Inputs["projectAssembly"] = typeof(ProjectComponentPlugin).Assembly;
+      dctx.Inputs["projectId"] = s_projectId;
+      dctx.Inputs["projectData"] = s_projectData;
+
+      object project = default;
+      if (s_projectServer.TryInvoke("plugins/v1/deserialize", dctx)
+            && dctx.Outputs.TryGet("project", out project))
+      {
+        // server reports errors
+        s_project = project;
+      }
+    }
+
+    public override GH_LoadingInstruction PriorityLoad()
+    {
+      if (AssemblyInfo.PluginCategoryIcon is SD.Bitmap icon)
+      {
+        Grasshopper.Instances.ComponentServer.AddCategoryIcon("otepad", icon);
+      }
+      Grasshopper.Instances.ComponentServer.AddCategorySymbolName("otepad", "otepad"[0]);
+
+      return GH_LoadingInstruction.Proceed;
+    }
+
+    public static bool TryCreateScript(GH_Component ghcomponent, string serialized, out object script)
+    {
+      script = default;
+
+      if (s_projectServer is null) return false;
+
+      dynamic dctx = ProjectInterop.CreateInvokeContext();
+      dctx.Inputs["component"] = ghcomponent;
+      dctx.Inputs["project"] = s_project;
+      dctx.Inputs["scriptData"] = serialized;
+
+      if (s_projectServer.TryInvoke("plugins/v1/gh/deserialize", dctx))
+      {
+        return dctx.Outputs.TryGet("script", out script);
+      }
+
+      return false;
+    }
+
+    public static void DisposeScript(GH_Component ghcomponent, object script)
+    {
+      if (script is null)
+        return;
+
+      dynamic dctx = ProjectInterop.CreateInvokeContext();
+      dctx.Inputs["component"] = ghcomponent;
+      dctx.Inputs["project"] = s_project;
+      dctx.Inputs["script"] = script;
+
+      if (!s_projectServer.TryInvoke("plugins/v1/gh/dispose", dctx))
+        throw new Exception("Error disposing Grasshopper script component");
+    }
+  }
+}

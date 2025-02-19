@@ -1,0 +1,77 @@
+{
+  "host": {
+    "name": "Rhino3D",
+    "version": "8.12.24282\u002B7001",
+    "os": "windows",
+    "arch": "x64"
+  },
+  "id": "177b012e-ed62-40ec-8a77-220dbd4b38ae",
+  "identity": {
+    "name": "VworldTo3D",
+    "version": "0.1",
+    "publisher": {
+      "email": "bsh960flash@snu.ac.kr",
+      "name": "Byun Sanghoon"
+    },
+    "description": "Only Available in Korea , it\u0027s for V-World .shp file zip file ",
+    "copyright": "Copyright \u00A9 2024 Byun Sanghoon",
+    "license": "MIT",
+    "image": {
+      "light": {
+        "type": "svg",
+        "data": "PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMHB0IDBwdCA0OHB0IDQ4cHQiIGZpbGwtZGFyaz0iI0ZGRiIgc3Ryb2tlLWRhcms9Im5vbmUiPg0KICA8bGluZSBmaWxsLWRhcms9IiNGRkYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWRhcms9IiMwMDAiIHgxPSI2LjUiIHkxPSI0LjUiIHgyPSIyNC41IiB5Mj0iNDAuNSIgLz4NCiAgPGxpbmUgZmlsbC1kYXJrPSIjRkZGIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1kYXJrPSIjMDAwIiB4MT0iMjQuNSIgeTE9IjQwLjUiIHgyPSI0MS41IiB5Mj0iMy41IiAvPg0KPC9zdmc\u002B"
+      },
+      "projectIcon": {
+        "light": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAM1JREFUSEvtlbsKwkAURBc7wULQ1j6ViJ2FlWAnNimsrS0ECzs/wW92hiGgYZPdvbkWggcGhhQJZx834ReZIxPVT/iwVjXDd9xU4xyRlaqJPbJRjTNFrqrFjJCHaj9Wiy2yU\u002B3HanFHxqppSi3WyEE1j1KLCzJTzSfXokJOqmXkWpyRhWo5KQu\u002BmB8wk7Lg0nCJBtFlwU3l5g6my4LHksfThbYFLxQvlhttC44EjgZX3i041DjcXGksOI45lr8CLZ5I9I/lAS2Wqn9cCOEFbocSF8Z9jxAAAAAASUVORK5CYII=",
+          "width": 24,
+          "height": 24
+        },
+        "dark": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABhJREFUSEvtwQEBAAAAgiD/r64hQAAAXA0JGAAB0AJbXgAAAABJRU5ErkJggg==",
+          "width": 24,
+          "height": 24
+        },
+        "icoData": "AAABAAEAGBgAAAEAIAB9AQAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAYAAAAGAgGAAAA4Hc9\u002BAAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAEfSURBVEhL7ZU9awJBFEU3WgVEBIVU9mIhwUpMCn9Ciljnt6ZQC8EuYCFYCKLYpEihSZN7Z2ZhmJ1vtPPAYd/bYt/c2Vktbk1dXa9JB9bgLxsWJQ34Lsts\u002BIwP\u002BCM6oA/gzT/4LLo8xnAuS4k\u002BgHzCiSyT4bNGcCE6hfkOzvAJPsIDbyTwCvdwKzqFmYDkpqhsD7GdopwUQ3iBX6LTsCUgqSmsqyeu7yAlRQ824VJ0Bq4EJDYFVz\u002BTZRXfgG/IE\u002BH7LrrqulPXCr4BJJTiBVr3viQ0wJeiDfm7sxadg9AA4krhPDk6MQNsKXi6\u002BnAlOg8xA4iZImr1JHaAmYIv13k0dVL\u002BcI7wDT7AE9zAILEJSJliCqO2J4cWHMjyzlUoin9M\u002BTFJqx47TgAAAABJRU5ErkJggg=="
+      },
+      "categoryIcon": {
+        "light": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAAIVJREFUOE9joCbQhtLEAFcgZoIwESAQiFkgTLyAF4g9IExUIATEzhAmXuANxFwQJiYg5Ao2IPaHMLEDQq5wAWJBCBM3wOeKUCiNF\u002BByhQUQy0KYhAE2VxBlOwygu0ILiElJJ2CA7AqSbIcBmCtA/rYECZADQK4IhzDJAyBXmECYgxMwMAAAiJIIBhhMAUgAAAAASUVORK5CYII=",
+          "width": 16,
+          "height": 16
+        },
+        "dark": {
+          "bytes": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYII=",
+          "width": 16,
+          "height": 16
+        }
+      }
+    }
+  },
+  "settings": {
+    "buildPath": "build/",
+    "buildTarget": {
+      "host": {
+        "name": "Rhino3D",
+        "version": "8.11"
+      },
+      "title": "Rhino3D (8.11)",
+      "slug": "rh8_11"
+    },
+    "publishTarget": {
+      "title": "McNeel Yak \uC11C\uBC84"
+    }
+  },
+  "codes": [
+    {
+      "type": "components",
+      "id": "0146b5ca-0825-436f-9f8e-5ebf7976699e",
+      "language": {
+        "id": "*.gh1.grasshopper",
+        "version": "1.*.*"
+      },
+      "title": "main.gh",
+      "uri": "file:///C:/Users/bsh96/Documents/GitHub/SHPtoContext/main.gh"
+    }
+  ]
+}
