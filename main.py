@@ -59,6 +59,7 @@ class ShapefileHandler:
                             shx=zip_file.open(f"{prefix}.shx"),
                             dbf=zip_file.open(f"{prefix}.dbf"),
                             prj=zip_file.open(f"{prefix}.prj"),
+                            encoding="cp949",
                         )
                     )
                 except KeyError:
@@ -258,7 +259,9 @@ class BuildingProcessor:
             if projected_pts:
                 min_z = min(pt.Z for pt in projected_pts)
                 base_curve.Translate(geo.Vector3d(0, 0, min_z - vertices[0].Z))
-                breps.append(geo.Extrusion.Create(base_curve, -height, True))
+                building = geo.Extrusion.Create(base_curve, -height, True)
+                breps.append(building)
+
         return breps
 
 
@@ -270,12 +273,17 @@ contour_shapes = handler.read_shapefile(["N1L_F0010000", "N3L_F0010000"])
 building_shapes = handler.read_shapefile(["N1A_B0010000", "N3A_B0010000"])
 road_region_shapes = handler.read_shapefile(["N3A_A0010000"])
 road_centerline_shapes = handler.read_shapefile(["N3L_A0020000"])
+river_shapes = handler.read_shapefile(["N3A_E0010001"])
+water_shapes = handler.read_shapefile(["N3A_G0020000"])
 
 # Extract data
 contour_data = handler.extract_data(contour_shapes)
 building_data = handler.extract_data(building_shapes)
 road_region_data = handler.extract_data(road_region_shapes)
 road_centerline_data = handler.extract_data(road_centerline_shapes)
+river_data = handler.extract_data(river_shapes)
+water_shapes_data = handler.extract_data(water_shapes)
+
 
 # Process contour
 contour_geometry_records = list(zip(contour_data.geometry, contour_data.records))
@@ -294,3 +302,8 @@ building_breps = BuildingProcessor.create_building_breps(
 # Process road
 road_region_curves = [data[0] for data in road_region_data.geometry]
 road_centerline_curves = [data[0] for data in road_centerline_data.geometry]
+
+# process river
+river_curves = [data[0] for data in river_data.geometry]
+# process water
+water_curves = [data[0] for data in water_shapes_data.geometry]
